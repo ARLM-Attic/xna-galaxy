@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Core")]
-[assembly: AssemblyProduct("Core")]
+[assembly: AssemblyTitle("Galaxy.Core")]
+[assembly: AssemblyProduct("Galaxy.Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCopyright("Copyright ©  2009 XNA Naver cafe")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
