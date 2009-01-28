@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 
+using Galaxy.Core;
+
 namespace RD2
 {
     /// <summary>
@@ -18,12 +20,11 @@ namespace RD2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+       Galaxy.Core.Graphics galaxyGrp;
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            galaxyGrp = new Graphics(this, 5);
             Content.RootDirectory = "Content";
         }
 
@@ -46,8 +47,8 @@ namespace RD2
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            galaxyGrp.SetGraphicDevice(this.GraphicsDevice);
+            galaxyGrp.Init2D();
 
             // TODO: use this.Content to load your game content here
         }
@@ -83,7 +84,7 @@ namespace RD2
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            galaxyGrp.ClearScreen(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
 
