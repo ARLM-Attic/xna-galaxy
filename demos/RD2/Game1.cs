@@ -20,7 +20,8 @@ namespace RD2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-       Galaxy.Core.Graphics galaxyGrp;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
 
         public Game1()
         {
@@ -37,7 +38,6 @@ namespace RD2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -86,7 +86,7 @@ namespace RD2
         {
             galaxyGrp.ClearScreen(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            // TODO: Add your drawing code here          
 
             base.Draw(gameTime);
         }
