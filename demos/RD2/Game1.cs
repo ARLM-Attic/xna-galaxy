@@ -20,8 +20,7 @@ namespace RD2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+       Galaxy.Core.Graphics galaxyGrp;
 
         public Game1()
         {
@@ -38,6 +37,7 @@ namespace RD2
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             base.Initialize();
         }
 
