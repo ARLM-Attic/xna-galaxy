@@ -30,7 +30,7 @@ namespace Galaxy.Core
     {
         public UInt32      id;
         public Vector2     position;
-        public Texture2D   image;
+        public Texture2D   texture;
         public bool        holdLife;
     };
 
@@ -74,7 +74,15 @@ namespace Galaxy.Core
             Debug.Assert(layers != null);
             if ( layers != null )
             {
-                maxLayerNum = layerNum;
+                uint     i;
+
+                for ( i = 0; i < layerNum; i++ )
+                {
+                    layers[i] = new LinkedList<Image2D>();
+                    if ( layers[i] == null )
+                        break;
+                }
+                maxLayerNum = i;
             }
         }
 
@@ -88,12 +96,45 @@ namespace Galaxy.Core
             GraphicsDevice = grpDevice;
             Debug.Assert(GraphicsDevice != null);
         }
-        
+
+        /**
+         * Updates the screen, it draws 2D images and 3D models to
+         * the target screen.
+         * 
+         * @param gameTime     Provides a snapshot of timing values.
+         */
+        public void UpdateScreen(GameTime gameTime)
+        {
+            int                     i;
+            LinkedList<Image2D>     list;
+            LinkedListNode<Image2D> node;
+            Image2D                 image;
+
+            /* Draws 2D images in the layers */
+            sprBatch.Begin();
+            for ( i = 0; i < maxLayerNum; i++ )
+            {
+                list = layers[i];
+                if ( list.Count() > 0 )
+                {
+                    node = list.First;
+                    while ( node != null )
+                    {
+                        image = node.Value;
+                        sprBatch.Draw(image.texture, image.position,
+                                      Color.White);
+                        node = node.Next;
+                    }
+                }
+            }
+            sprBatch.End();
+        }
+
         //===================================================================
         // 2D Graphic Implimentation
         //===================================================================
         #region 2DGraphic
-        
+
         /**
          * Initializes 2D Graphic system.
          * 
@@ -128,7 +169,8 @@ namespace Galaxy.Core
          * The image added to the image layer is not drawn immediately,
          * it will be drawn when Update() method is called.
          * 
-         * @param layerNo       Layer number which will have the image
+         * @param layerNo       Layer number which will have the image,
+         *                      it must be 1 or above.
          * @param image         Image, 2D texture
          * @param position      The location, in screen coordinates,
          *                      where the image will be put.
@@ -136,16 +178,16 @@ namespace Galaxy.Core
          * @return  an unique id for the added image as Image2D to an
          *          image layer, or 0 otherwise.
          */
-        UInt32 PutImage(uint layerNo, Texture2D image, Vector2 position)
+        public UInt32 PutImage(uint layerNo, Texture2D image, Vector2 position)
         {
             Image2D myImage;
 
-            Debug.Assert(layerNo < maxLayerNum);
+            Debug.Assert(layerNo <= maxLayerNum);
 
             myImage = new Image2D();
             myImage.id       = 1;
             myImage.position = position;
-            myImage.image    = image;
+            myImage.texture    = image;
             myImage.holdLife = true;
 
             layers[layerNo - 1].AddLast(myImage);

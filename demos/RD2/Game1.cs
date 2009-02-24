@@ -47,8 +47,12 @@ namespace RD2
         /// </summary>
         protected override void LoadContent()
         {
+            Texture2D   texture;
             galaxyGrp.SetGraphicDevice(this.GraphicsDevice);
             galaxyGrp.Init2D();
+
+            texture = Content.Load<Texture2D>("images\\sample");
+            galaxyGrp.PutImage(1, texture, new Vector2(50, 50));
 
             // TODO: use this.Content to load your game content here
         }
@@ -85,8 +89,9 @@ namespace RD2
         protected override void Draw(GameTime gameTime)
         {
             galaxyGrp.ClearScreen(Color.CornflowerBlue);
+            galaxyGrp.UpdateScreen(gameTime);
 
-            // TODO: Add your drawing code here          
+            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
