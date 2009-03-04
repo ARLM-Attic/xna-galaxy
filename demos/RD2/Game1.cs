@@ -21,30 +21,29 @@ namespace RD2
     public class Game1 : Microsoft.Xna.Framework.Game
     {
        Galaxy.Core.Graphics galaxyGrp;
-
+       cTerrain m_Terrain;
+        
         public Game1()
         {
             galaxyGrp = new Graphics(this, 5);
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
 
+            #region 지형 생성
+
+            const string heightMap_Name = "content\\map\\smile.bmp";
+
+            m_Terrain = new cTerrain();
+            m_Terrain.Init(GraphicsDevice, heightMap_Name);
+            #endregion
+
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
             Texture2D   texture;
@@ -54,44 +53,60 @@ namespace RD2
             texture = Content.Load<Texture2D>("images\\sample");
             galaxyGrp.PutImage(1, texture, new Vector2(50, 50));
 
-            // TODO: use this.Content to load your game content here
+
+            // 3D Map용 Texture 로드
+            const string textureName = "Map\\texture";
+            m_Terrain.LoadTexture(Content, textureName);
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+
+        // 임시로 카메라 Update 함수 만듬.
+        private void UpdateCamera(ref Matrix projectionMatrix, ref Matrix viewMatrix)
+        {
+            Vector3 cameraPosition = new Vector3(80.0f, 80.0f, 80.0f);
+            Vector3 cameraTarget = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 cameraUpvector = Vector3.Up;
+
+            float aspectRatio = (float)GraphicsDevice.Viewport.Width / (float)GraphicsDevice.Viewport.Height;    //화면의 종횡비를 저장
+            
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4,    //카메라의 앵글
+                                                                            aspectRatio,         //카메라의 세로 비율
+                                                                          0.1f, 1000.0f);        //카메라의 최소, 최대 구간
+
+            viewMatrix = Matrix.CreateLookAt(cameraPosition,      // 카메라의 위치 
+                                                    cameraTarget,        // 카메라의 볼위치 
+                                                    cameraUpvector);     // 카메라의 업벡터  
+        }
+
+        // 임시로 카메라 행렬 변수 선언.
+        Matrix projectionMatrix = new Matrix();
+        Matrix viewMatrix = new Matrix();
+
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            UpdateCamera(ref projectionMatrix, ref viewMatrix);
+            
+            m_Terrain.Update(projectionMatrix, viewMatrix);           
 
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             galaxyGrp.ClearScreen(Color.CornflowerBlue);
-            galaxyGrp.UpdateScreen(gameTime);
 
-            // TODO: Add your drawing code here
+            m_Terrain.Draw(GraphicsDevice);
+
+            galaxyGrp.UpdateScreen(gameTime);
 
             base.Draw(gameTime);
         }
