@@ -87,7 +87,7 @@ namespace Galaxy.Core
         }
 
         /**
-         * Clears layer.
+         * Clears specific layer.
          * 
          * All images in layer will be removed.
          * 
