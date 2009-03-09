@@ -87,6 +87,36 @@ namespace Galaxy.Core
         }
 
         /**
+         * Clears layer.
+         * 
+         * All images in layer will be removed.
+         * 
+         * @param layerNo       Layer index to be cleared
+         */
+        public void ClearLayer(uint layerNo)
+        {
+            if ( layerNo < 1 || layerNo > maxLayerNum )
+                return;
+            layers[layerNo - 1].Clear();
+        }
+
+        /**
+         * Clears All layers.
+         * 
+         * All images in all layers will be removed.
+         * 
+         */
+        public void ClearAllLayer()
+        {
+            uint i;
+
+            if ( maxLayerNum < 1 )
+                return;
+            for ( i = 0; i < maxLayerNum; i++ )
+                ClearLayer(i);
+        }
+
+        /**
          * Sets the GraphicsDevice.
          * 
          * @param grpDevice     Graphics Device
@@ -123,6 +153,10 @@ namespace Galaxy.Core
                         image = node.Value;
                         sprBatch.Draw(image.texture, image.position,
                                       Color.White);
+                        if ( image.holdLife == false )
+                        {
+                            list.Remove(node.Value);
+                        }
                         node = node.Next;
                     }
                 }
@@ -184,10 +218,9 @@ namespace Galaxy.Core
 
             Debug.Assert(layerNo <= maxLayerNum);
 
-            myImage = new Image2D();
             myImage.id       = 1;
             myImage.position = position;
-            myImage.texture    = image;
+            myImage.texture  = image;
             myImage.holdLife = true;
 
             layers[layerNo - 1].AddLast(myImage);
