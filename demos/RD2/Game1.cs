@@ -89,9 +89,16 @@ namespace RD2
 
         protected override void Update(GameTime gameTime)
         {
+            Galaxy.Core.Input.Update();
+
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if ( Input.IsKeyPressed(Keys.Escape) ||
+                Input.IsKeyPressed(Keys.Enter) ||
+                Input.IsKeyPressed(Keys.Space) ||
+                GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed )
+            {
                 this.Exit();
+            }
 
             UpdateCamera(ref projectionMatrix, ref viewMatrix);
             
