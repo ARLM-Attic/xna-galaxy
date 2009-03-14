@@ -20,12 +20,12 @@ namespace RD2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-       Galaxy.Core.Graphics galaxyGrp;
-       cTerrain m_Terrain;
+        cTerrain m_Terrain;
+        Image2D  demoImage = null;
         
         public Game1()
         {
-            galaxyGrp = new Graphics(this, 5);
+            Graphics.Initialize(this, 5);
             Content.RootDirectory = "Content";
         }
 
@@ -47,11 +47,12 @@ namespace RD2
         protected override void LoadContent()
         {
             Texture2D   texture;
-            galaxyGrp.SetGraphicDevice(this.GraphicsDevice);
-            galaxyGrp.Init2D();
+
+            Graphics.SetGraphicDevice(this.GraphicsDevice);
+            Graphics.Init2DSystem();
 
             texture = Content.Load<Texture2D>("images\\sample");
-            galaxyGrp.PutImage(1, texture, new Vector2(50, 50));
+            demoImage = Graphics.PutImage(1, texture, new Vector2(50, 50));
 
 
             // 3D Map¿ë Texture ·Îµå
@@ -100,6 +101,24 @@ namespace RD2
                 this.Exit();
             }
 
+            /* Just test code to moving the demo image */
+            if ( Input.IsKeyPressed(Keys.Left) )
+            {
+                demoImage.Move(-2.0f, 0.0f);
+            }
+            if ( Input.IsKeyPressed(Keys.Right) )
+            {
+                demoImage.Move(2.0f, 0.0f);
+            }
+            if ( Input.IsKeyPressed(Keys.Up) )
+            {
+                demoImage.Move(0.0f, -2.0f);
+            }
+            if ( Input.IsKeyPressed(Keys.Down) )
+            {
+                demoImage.Move(.0f, 2.0f);
+            }
+
             UpdateCamera(ref projectionMatrix, ref viewMatrix);
             
             m_Terrain.Update(projectionMatrix, viewMatrix);           
@@ -109,11 +128,11 @@ namespace RD2
 
         protected override void Draw(GameTime gameTime)
         {
-            galaxyGrp.ClearScreen(Color.CornflowerBlue);
+            Graphics.ClearScreen(Color.CornflowerBlue);
 
             m_Terrain.Draw(GraphicsDevice);
 
-            galaxyGrp.UpdateScreen(gameTime);
+            Graphics.UpdateScreen(gameTime);
 
             base.Draw(gameTime);
         }

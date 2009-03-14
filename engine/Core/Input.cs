@@ -67,10 +67,10 @@ namespace Galaxy.Core
         
         private class GamePad
         {
-            private List<GamePadButtons> /* unused */ gamePadButtons;
+            private List<GamePadButtons> gamePadButtons;
             public GamePad()
             {
-                /* gamePadButtons = new List<GamePadButtons>(); */
+                gamePadButtons = new List<GamePadButtons>();
             }
         };
 
@@ -80,7 +80,7 @@ namespace Galaxy.Core
 
         private class Keyboard
         {
-            public List<Keys> /* unused */ keyboardKeys;
+            public List<Keys> keyboardKeys;
 
             /* The state of the keyboard as of the last update. */
             private static KeyboardState currentState;
@@ -100,7 +100,7 @@ namespace Galaxy.Core
 
             public Keyboard()
             {
-                /* keyboardKeys = new List<Keys>(); */
+                keyboardKeys = new List<Keys>();
             }
         };
 

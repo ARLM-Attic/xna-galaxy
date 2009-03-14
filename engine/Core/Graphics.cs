@@ -24,22 +24,35 @@ using Microsoft.Xna.Framework.Graphics;
 
 using System.Diagnostics;
 
+
 namespace Galaxy.Core
 {
-    struct Image2D
+    public sealed class Image2D
     {
         public UInt32      id;
         public Vector2     position;
         public Texture2D   texture;
         public bool        holdLife;
+
+        public void Move(float x, float y)
+        {
+            position.X += x;
+            position.Y += y;
+        }
     };
 
-    public class Graphics
+    public static class Graphics
     {
-        private GraphicsDeviceManager grpDevMgr   = null;
-        private SpriteBatch           sprBatch    = null;
-        private LinkedList<Image2D>[] layers      = null;
-        private uint                  maxLayerNum = 0;
+        private static GraphicsDeviceManager grpDevMgr   = null;
+        private static SpriteBatch           sprBatch    = null;
+        private static LinkedList<Image2D>[] layers      = null;
+        private static uint                  maxLayerNum = 0;
+
+        private enum ImageLayer
+        {
+            LimitNumber    = 50
+
+        };
 
         //
         // Summary:
@@ -47,31 +60,44 @@ namespace Galaxy.Core
         //
         // Returns:
         //     The current Framework.Graphics.GraphicsDevice.
-        private GraphicsDevice GraphicsDevice { get; set; }
+        private static GraphicsDevice GraphicsDevice { get; set; }
 
-        public Graphics()
-        {
-            Debug.Fail("Please call Graphics(game, planeNum) constructor "
-                         + "instead of this constructor"); 
-        }
-        
         /**
-         * Graphics class constructor.
+         * Initializes Graphics Engine.
          * 
-         * Initializes a new instance of this class, which provides
+         * Initializes Graphics Engine, which provides
          * GraphicsDeviceManager and image layer.
          * 
          * @param game          Game object
          * @param layerNum      The number of image layers
+         * 
+         * @return  'true' if sucess, 'false' otherwise.
          */
-        public Graphics(Game game, uint layerNum)
+        public static bool Initialize(Game game, uint layerNum)
         {
             Debug.Assert(game != null);
+            if ( game == null || layerNum <= 0 )
+                return false;
+            if ( layerNum > (uint)ImageLayer.LimitNumber )
+            {
+                Debug.Fail(
+                    "Image Layer number you requested is over the limit.\n"
+                    + "Please set the number under " + ImageLayer.LimitNumber
+                    + " and less " + ImageLayer.LimitNumber + ".");
+                return false;
+            }
 
             grpDevMgr = new GraphicsDeviceManager(game);
 
             layers = new LinkedList<Image2D>[layerNum];
             Debug.Assert(layers != null);
+            if ( layers == null )
+            {
+                Debug.Fail("Failed to create Image Layers. layerNum = "
+                            + layerNum + ".");
+                return false;
+            }
+
             if ( layers != null )
             {
                 uint     i;
@@ -80,10 +106,25 @@ namespace Galaxy.Core
                 {
                     layers[i] = new LinkedList<Image2D>();
                     if ( layers[i] == null )
+                    {
+                        Debug.Fail("Failed to create Image List. ("
+                                    + i + " / " + layerNum  + ")");
                         break;
+                    }
                 }
                 maxLayerNum = i;
             }
+
+            return (maxLayerNum == layerNum);
+        }
+
+        /**
+         * Finalize Graphics Engine.
+         * 
+         */
+        public static void Finalize(Game game, uint layerNum)
+        {
+            Console.WriteLine("Finalize Galaxy Graphics Engine...");
         }
 
         /**
@@ -93,7 +134,7 @@ namespace Galaxy.Core
          * 
          * @param layerNo       Layer index to be cleared
          */
-        public void ClearLayer(uint layerNo)
+        public static void ClearLayer(uint layerNo)
         {
             if ( layerNo < 1 || layerNo > maxLayerNum )
                 return;
@@ -106,7 +147,7 @@ namespace Galaxy.Core
          * All images in all layers will be removed.
          * 
          */
-        public void ClearAllLayer()
+        public static void ClearAllLayer()
         {
             uint i;
 
@@ -121,7 +162,7 @@ namespace Galaxy.Core
          * 
          * @param grpDevice     Graphics Device
          */
-        public void SetGraphicDevice(GraphicsDevice grpDevice)
+        public static void SetGraphicDevice(GraphicsDevice grpDevice)
         {
             GraphicsDevice = grpDevice;
             Debug.Assert(GraphicsDevice != null);
@@ -133,7 +174,7 @@ namespace Galaxy.Core
          * 
          * @param gameTime     Provides a snapshot of timing values.
          */
-        public void UpdateScreen(GameTime gameTime)
+        public static void UpdateScreen(GameTime gameTime)
         {
             int                     i;
             LinkedList<Image2D>     list;
@@ -177,7 +218,7 @@ namespace Galaxy.Core
          * @return  true if the initialization of 2D system is succeed,
          *          false otherwise.
          */
-        public bool Init2D()
+        public static bool Init2DSystem()
         {
             Debug.Assert(GraphicsDevice != null);
 
@@ -191,7 +232,7 @@ namespace Galaxy.Core
          * 
          * @param color     Color to clear the screen
          */
-        public void ClearScreen(Color color)
+        public static void ClearScreen(Color color)
         {
             Debug.Assert(GraphicsDevice != null);
             GraphicsDevice.Clear(color);
@@ -209,23 +250,31 @@ namespace Galaxy.Core
          * @param position      The location, in screen coordinates,
          *                      where the image will be put.
          * 
-         * @return  an unique id for the added image as Image2D to an
-         *          image layer, or 0 otherwise.
+         * @return  Image2D if success, null otherwise.
          */
-        public UInt32 PutImage(uint layerNo, Texture2D image, Vector2 position)
+        public static Image2D PutImage(uint layerNo, Texture2D image, Vector2 position)
         {
-            Image2D myImage;
+            Image2D myImage = null;
 
             Debug.Assert(layerNo <= maxLayerNum);
+            if ( layerNo > maxLayerNum )
+                return null;
 
-            myImage.id       = 1;
-            myImage.position = position;
-            myImage.texture  = image;
-            myImage.holdLife = true;
+            myImage = new Image2D();
+            if ( myImage != null )
+            {
+                myImage.id = 1;
+                myImage.position = position;
+                myImage.texture = image;
+                myImage.holdLife = true;
 
-            layers[layerNo - 1].AddLast(myImage);
+                if ( layers[layerNo - 1].AddLast(myImage) == null )
+                {
+                    myImage = null;
+                }
+            }
 
-            return myImage.id;
+            return myImage;
         }
         
         #endregion // 2DGraphic
