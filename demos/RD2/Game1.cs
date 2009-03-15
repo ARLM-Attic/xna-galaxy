@@ -94,29 +94,41 @@ namespace RD2
 
             // Allows the game to exit
             if ( Input.IsKeyPressed(Keys.Escape) ||
-                Input.IsKeyPressed(Keys.Enter) ||
-                Input.IsKeyPressed(Keys.Space) ||
-                GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed )
+                        Input.IsButtonPressed(Buttons.Start) )
             {
                 this.Exit();
             }
 
             /* Just test code to moving the demo image */
-            if ( Input.IsKeyPressed(Keys.Left) )
+            if ( demoImage != null )
             {
-                demoImage.Move(-2.0f, 0.0f);
-            }
-            if ( Input.IsKeyPressed(Keys.Right) )
-            {
-                demoImage.Move(2.0f, 0.0f);
-            }
-            if ( Input.IsKeyPressed(Keys.Up) )
-            {
-                demoImage.Move(0.0f, -2.0f);
-            }
-            if ( Input.IsKeyPressed(Keys.Down) )
-            {
-                demoImage.Move(.0f, 2.0f);
+                if ( Input.IsKeyDown(Keys.Left) ||
+                                Input.IsButtonDown(Buttons.DPadLeft) )
+                {
+                    demoImage.Move(-2.0f, 0.0f);
+                }
+                if ( Input.IsKeyDown(Keys.Right) ||
+                                Input.IsButtonDown(Buttons.DPadRight) )
+                {
+                    demoImage.Move(2.0f, 0.0f);
+                }
+                if ( Input.IsKeyDown(Keys.Up) ||
+                                Input.IsButtonDown(Buttons.DPadUp) )
+                {
+                    demoImage.Move(0.0f, -2.0f);
+                }
+                if ( Input.IsKeyDown(Keys.Down) ||
+                                Input.IsButtonDown(Buttons.DPadDown) )
+                {
+                    demoImage.Move(.0f, 2.0f);
+                }
+
+                if ( Input.IsKeyPressed(Keys.Space) ||
+                                Input.IsButtonPressed(Buttons.A) )
+                {
+                    Graphics.RemoveImage(1, demoImage);
+                    demoImage = null;
+                }
             }
 
             UpdateCamera(ref projectionMatrix, ref viewMatrix);

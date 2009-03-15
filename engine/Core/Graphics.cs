@@ -276,6 +276,30 @@ namespace Galaxy.Core
 
             return myImage;
         }
+
+        /**
+         * Removed an image in image layer.
+         * 
+         * The image added to the image layer is not drawn immediately,
+         * it will be drawn when Update() method is called.
+         * 
+         * @param layerNo       Layer number which has image.
+         * @param image         Image to be removed.
+         * 
+         * @return  true if the image is removed, false otherwise.
+         */
+        public static bool RemoveImage(uint layerNo, Image2D image)
+        {
+            Debug.Assert(layerNo <= maxLayerNum);
+            if ( layerNo <= maxLayerNum )
+            {
+                if ( layers[layerNo - 1].Remove(image) )
+                {
+                    image = null;
+                }
+            }
+            return false;
+        }
         
         #endregion // 2DGraphic
 
