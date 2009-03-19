@@ -27,17 +27,74 @@ using System.Diagnostics;
 
 namespace Galaxy.Core
 {
-    public sealed class Image2D
+    public sealed class Sprite
     {
-        public UInt32      id;
-        public Vector2     position;
-        public Texture2D   texture;
-        public bool        holdLife;
+        public  UInt32      id;
+        public  Vector2     position;
+        public  Texture2D   srcTexture;
+        public  Texture2D   texture;
+        public  Vector2     origin;
+        public  Vector2     scale;
+        public  float       rotation;
+        public  bool        holdLife;
+
+        public Sprite(UInt32 id, Texture2D image, Vector2 pos,
+                       Vector2 origin, uint zoomX, uint zoomY,
+                       float rotation, bool holdLife)
+        {
+            this.id       = id;
+            position      = pos;
+            srcTexture    = image;
+            texture       = srcTexture;
+            this.origin   = origin;
+            scale.X       = zoomX / 100.0f;
+            scale.Y       = zoomY / 100.0f;
+            this.rotation = rotation;
+            this.holdLife = holdLife;
+        }
+
+        ~Sprite()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            texture     = null;
+            srcTexture  = null;
+        }
 
         public void Move(float x, float y)
         {
             position.X += x;
             position.Y += y;
+        }
+
+        public void SetZoom(uint zoomX, uint zoomY)
+        {
+            scale.X = zoomX / 100.0f;
+            scale.Y = zoomY / 100.0f;
+        }
+
+        public void SetScale(Vector2 scale)
+        {
+            this.scale = scale;
+        }
+
+        public void SetRotation(float degrees)
+        {
+            rotation = MathHelper.ToRadians(degrees);
+        }
+
+        public void Rotate(float degrees)
+        {
+            float r360 = MathHelper.ToRadians(360);
+
+            rotation += MathHelper.ToRadians(degrees);
+            if ( rotation > r360 )
+                rotation -= r360;
+            if ( rotation < -r360 )
+                rotation += r360;
         }
     };
 
@@ -45,10 +102,10 @@ namespace Galaxy.Core
     {
         private static GraphicsDeviceManager grpDevMgr   = null;
         private static SpriteBatch           sprBatch    = null;
-        private static LinkedList<Image2D>[] layers      = null;
+        private static LinkedList<Sprite>[]  layers      = null;
         private static uint                  maxLayerNum = 0;
 
-        private enum ImageLayer
+        private enum SpriteLayer
         {
             LimitNumber    = 50
 
@@ -66,10 +123,10 @@ namespace Galaxy.Core
          * Initializes Graphics Engine.
          * 
          * Initializes Graphics Engine, which provides
-         * GraphicsDeviceManager and image layer.
+         * GraphicsDeviceManager and Sprite layer.
          * 
          * @param game          Game object
-         * @param layerNum      The number of image layers
+         * @param layerNum      The number of Sprite layers
          * 
          * @return  'true' if sucess, 'false' otherwise.
          */
@@ -78,22 +135,22 @@ namespace Galaxy.Core
             Debug.Assert(game != null);
             if ( game == null || layerNum <= 0 )
                 return false;
-            if ( layerNum > (uint)ImageLayer.LimitNumber )
+            if ( layerNum > (uint)SpriteLayer.LimitNumber )
             {
                 Debug.Fail(
-                    "Image Layer number you requested is over the limit.\n"
-                    + "Please set the number under " + ImageLayer.LimitNumber
-                    + " and less " + ImageLayer.LimitNumber + ".");
+                    "Sprite Layer number you requested is over the limit.\n"
+                    + "Please set the number under " + SpriteLayer.LimitNumber
+                    + " and less " + SpriteLayer.LimitNumber + ".");
                 return false;
             }
 
             grpDevMgr = new GraphicsDeviceManager(game);
 
-            layers = new LinkedList<Image2D>[layerNum];
+            layers = new LinkedList<Sprite>[layerNum];
             Debug.Assert(layers != null);
             if ( layers == null )
             {
-                Debug.Fail("Failed to create Image Layers. layerNum = "
+                Debug.Fail("Failed to create Sprite Layers. layerNum = "
                             + layerNum + ".");
                 return false;
             }
@@ -104,10 +161,10 @@ namespace Galaxy.Core
 
                 for ( i = 0; i < layerNum; i++ )
                 {
-                    layers[i] = new LinkedList<Image2D>();
+                    layers[i] = new LinkedList<Sprite>();
                     if ( layers[i] == null )
                     {
-                        Debug.Fail("Failed to create Image List. ("
+                        Debug.Fail("Failed to create Sprite List. ("
                                     + i + " / " + layerNum  + ")");
                         break;
                     }
@@ -130,7 +187,7 @@ namespace Galaxy.Core
         /**
          * Clears specific layer.
          * 
-         * All images in layer will be removed.
+         * All Sprites in layer will be removed.
          * 
          * @param layerNo       Layer index to be cleared
          */
@@ -144,7 +201,7 @@ namespace Galaxy.Core
         /**
          * Clears All layers.
          * 
-         * All images in all layers will be removed.
+         * All Spritess in all layers will be removed.
          * 
          */
         public static void ClearAllLayer()
@@ -169,7 +226,7 @@ namespace Galaxy.Core
         }
 
         /**
-         * Updates the screen, it draws 2D images and 3D models to
+         * Updates the screen, it draws 2D Sprites and 3D models to
          * the target screen.
          * 
          * @param gameTime     Provides a snapshot of timing values.
@@ -177,11 +234,11 @@ namespace Galaxy.Core
         public static void UpdateScreen(GameTime gameTime)
         {
             int                     i;
-            LinkedList<Image2D>     list;
-            LinkedListNode<Image2D> node;
-            Image2D                 image;
+            LinkedList<Sprite>     list;
+            LinkedListNode<Sprite> node;
+            Sprite                 spr;
 
-            /* Draws 2D images in the layers */
+            /* Draws 2D Sprites in the layers */
             sprBatch.Begin();
             for ( i = 0; i < maxLayerNum; i++ )
             {
@@ -191,10 +248,17 @@ namespace Galaxy.Core
                     node = list.First;
                     while ( node != null )
                     {
-                        image = node.Value;
-                        sprBatch.Draw(image.texture, image.position,
-                                      Color.White);
-                        if ( image.holdLife == false )
+                        spr = node.Value;
+                        sprBatch.Draw(spr.texture,
+                                      spr.position,
+                                      null,
+                                      Color.White,
+                                      spr.rotation,
+                                      spr.origin,
+                                      spr.scale,
+                                      SpriteEffects.None,
+                                      0);
+                        if ( spr.holdLife == false )
                         {
                             list.Remove(node.Value);
                         }
@@ -239,46 +303,76 @@ namespace Galaxy.Core
         }
 
         /**
-         * Puts the image to an image layer.
+         * Puts a sprite to specific Sprite layer.
          * 
-         * The image added to the image layer is not drawn immediately,
-         * it will be drawn when Update() method is called.
+         * The sprite to be added to the Sprite layer is not drawn
+         * immediately, it will be drawn when Update() method is called.
          * 
-         * @param layerNo       Layer number which will have the image,
+         * @param layerNo       Layer number which will have the Sprite,
          *                      it must be 1 or above.
          * @param image         Image, 2D texture
          * @param position      The location, in screen coordinates,
-         *                      where the image will be put.
+         *                      where the Sprite will be put.
          * 
-         * @return  Image2D if success, null otherwise.
+         * @return  Sprite if success, null otherwise.
          */
-        public static Image2D PutImage(uint layerNo, Texture2D image, Vector2 position)
+        public static Sprite PutSprite(uint layerNo, Texture2D image,
+                                       Vector2 position)
         {
-            Image2D myImage = null;
+            return PutSprite(layerNo, image, position,
+                             new Vector2(image.Width/2, image.Height/2),
+                             100, 100, 0, true);
+        }
+
+        /**
+         * Puts a sprite to specific Sprite layer, specifying origin,
+         * scale and rotation.
+         * 
+         * The sprite to be added to the Sprite layer is not drawn
+         * immediately, it will be drawn when Update() method is called.
+         * 
+         * @param layerNo       Layer number which will have the Sprite,
+         *                      it must be 1 or above.
+         * @param image         Image, 2D texture
+         * @param position      The location, in screen coordinates,
+         *                      where the Sprite will be put.
+         * @param origin        The origin of the sprite. Specify (0,0) for
+         *                      the upper-left corner.
+         * @param zoomX         Zoom value(scale) for the x-axis of the
+         *                      sprite, 100 means 100%.
+         * @param zoomY         Zoom value(scale) for the y-axis of the
+         *                      sprite, 100 means 100%.
+         * @param rotation      The angle, in radians, to rotate the sprite
+         *                      around the origin.
+         * 
+         * @return  Sprite if success, null otherwise.
+         */
+        public static Sprite PutSprite(uint layerNo, Texture2D image,
+                                       Vector2 position, Vector2 origin,
+                                       uint zoomX, uint zoomY,
+                                       float rotation,
+                                       bool holdLife)
+        {
+            Sprite mySpr = null;
 
             Debug.Assert(layerNo <= maxLayerNum);
             if ( layerNo > maxLayerNum )
                 return null;
 
-            myImage = new Image2D();
-            if ( myImage != null )
+            mySpr = new Sprite(0 /* not used yet */, image, position,
+                               origin, zoomX, zoomY, rotation, holdLife);
+            if ( mySpr != null )
             {
-                myImage.id = 1;
-                myImage.position = position;
-                myImage.texture = image;
-                myImage.holdLife = true;
-
-                if ( layers[layerNo - 1].AddLast(myImage) == null )
+                if ( layers[layerNo - 1].AddLast(mySpr) == null )
                 {
-                    myImage = null;
+                    mySpr = null;
                 }
             }
-
-            return myImage;
+            return mySpr;
         }
 
         /**
-         * Removed an image in image layer.
+         * Removed a sprite in specfic Sprite layer.
          * 
          * The image added to the image layer is not drawn immediately,
          * it will be drawn when Update() method is called.
@@ -288,17 +382,22 @@ namespace Galaxy.Core
          * 
          * @return  true if the image is removed, false otherwise.
          */
-        public static bool RemoveImage(uint layerNo, Image2D image)
+        public static bool RemoveImage(uint layerNo, Sprite image)
         {
             Debug.Assert(layerNo <= maxLayerNum);
             if ( layerNo <= maxLayerNum )
             {
                 if ( layers[layerNo - 1].Remove(image) )
                 {
+                    image.Dispose();
                     image = null;
                 }
             }
             return false;
+        }
+
+        public static void SetZoom(uint zoomX, uint zoomY)
+        {
         }
         
         #endregion // 2DGraphic
@@ -306,7 +405,7 @@ namespace Galaxy.Core
         //===================================================================
         // 3D Graphic Implimentation
         //===================================================================
-        #region 2DGraphic
+        #region 3DGraphic
     
         #endregion // 3DGraphic
     };

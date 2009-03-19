@@ -21,7 +21,9 @@ namespace RD2
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         cTerrain m_Terrain;
-        Image2D  demoImage = null;
+        Sprite   demoSpr  = null;
+        int      zoom     = 100;
+        int      zoomStep = 5;
         
         public Game1()
         {
@@ -52,7 +54,7 @@ namespace RD2
             Graphics.Init2DSystem();
 
             texture = Content.Load<Texture2D>("images\\sample");
-            demoImage = Graphics.PutImage(1, texture, new Vector2(50, 50));
+            demoSpr = Graphics.PutSprite(1, texture, new Vector2(250, 250));
 
 
             // 3D Map¿ë Texture ·Îµå
@@ -99,35 +101,49 @@ namespace RD2
                 this.Exit();
             }
 
-            /* Just test code to moving the demo image */
-            if ( demoImage != null )
+            /* Just test code to move, zoom and rotation the demo sprite */
+            if ( demoSpr != null )
             {
+                demoSpr.Rotate(1);
+                demoSpr.SetZoom((uint)zoom, (uint)zoom);
+                zoom += zoomStep;
+                if ( zoom > 500 )
+                {
+                    zoomStep = -5;
+                    zoom = 500;
+                }
+                if ( zoom < 0 )
+                {
+                    zoomStep = 5;
+                    zoom = 0;
+                }
+
                 if ( Input.IsKeyDown(Keys.Left) ||
                                 Input.IsButtonDown(Buttons.DPadLeft) )
                 {
-                    demoImage.Move(-2.0f, 0.0f);
+                    demoSpr.Move(-2.0f, 0.0f);
                 }
                 if ( Input.IsKeyDown(Keys.Right) ||
                                 Input.IsButtonDown(Buttons.DPadRight) )
                 {
-                    demoImage.Move(2.0f, 0.0f);
+                    demoSpr.Move(2.0f, 0.0f);
                 }
                 if ( Input.IsKeyDown(Keys.Up) ||
                                 Input.IsButtonDown(Buttons.DPadUp) )
                 {
-                    demoImage.Move(0.0f, -2.0f);
+                    demoSpr.Move(0.0f, -2.0f);
                 }
                 if ( Input.IsKeyDown(Keys.Down) ||
                                 Input.IsButtonDown(Buttons.DPadDown) )
                 {
-                    demoImage.Move(.0f, 2.0f);
+                    demoSpr.Move(.0f, 2.0f);
                 }
 
                 if ( Input.IsKeyPressed(Keys.Space) ||
                                 Input.IsButtonPressed(Buttons.A) )
                 {
-                    Graphics.RemoveImage(1, demoImage);
-                    demoImage = null;
+                    Graphics.RemoveImage(1, demoSpr);
+                    demoSpr = null;
                 }
             }
 
