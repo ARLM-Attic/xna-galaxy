@@ -24,6 +24,7 @@ namespace Galaxy.Core
 
         private Texture2D m_Texture;
 
+        // 지형 그리기 위한 Effect
         private BasicEffect m_TerrainEffect;
 
         // 지형을 생성합니다.
@@ -38,10 +39,13 @@ namespace Galaxy.Core
         {
             int[,] heightmap_Data = null;
 
+            // 하이트맵 데이타를 로딩해서, 정점과 인덱스 정보를 설정합니다.
             if (LoadHeightData(fileName, out heightmap_Data) == true)
             {
                 SetupVertices(device, ref heightmap_Data, m_Width, m_Height);
                 SetupIndices(device, m_Width, m_Height);
+                
+                // 그리는데 필요한 이펙트를 채웁니다.
                 CreateTerrainEffect(device);
             }
 
@@ -186,6 +190,7 @@ namespace Galaxy.Core
         {
             device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1.0f, 0);  //Z 버퍼 기능을 킨다.
 
+            
             device.RenderState.CullMode = CullMode.CullClockwiseFace;
 
             m_TerrainEffect.TextureEnabled = true;
@@ -219,6 +224,10 @@ namespace Galaxy.Core
             }
 
             m_TerrainEffect.End();
+
+
+            // 비행기 렌더링을 위해서, CullMode를 원상복귀 시킴
+            device.RenderState.CullMode = CullMode.CullCounterClockwiseFace;
         }
     }
 }

@@ -20,7 +20,10 @@ namespace RD2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        cTerrain m_Terrain;
+        // 3D 관련 오브젝트들을 선언
+        cTerrain        m_Terrain;
+        cPlayerPlane    m_PlayerPlane;
+
         Sprite   demoSpr  = null;
         int      zoom     = 100;
         int      zoomStep = 5;
@@ -41,6 +44,13 @@ namespace RD2
 
             m_Terrain = new cTerrain();
             m_Terrain.Init(GraphicsDevice, heightMap_Name);
+            
+            #endregion
+
+            #region 주인공 비행기 생성
+            
+            m_PlayerPlane = new cPlayerPlane();
+            
             #endregion
 
             base.Initialize();
@@ -60,6 +70,11 @@ namespace RD2
             // 3D Map용 Texture 로드
             const string textureName = "Map\\texture";
             m_Terrain.LoadTexture(Content, textureName);
+
+            // 주인공 비행기용 Model 로드(FBX파일에서 자동으로 텍스쳐를 읽어 들임)
+            const string planeModelName = "3D_Object\\ship";
+            m_PlayerPlane.Load(Content, planeModelName);
+
         }
 
         protected override void UnloadContent()
@@ -149,7 +164,8 @@ namespace RD2
 
             UpdateCamera(ref projectionMatrix, ref viewMatrix);
             
-            m_Terrain.Update(projectionMatrix, viewMatrix);           
+            m_Terrain.Update(projectionMatrix, viewMatrix);
+            m_PlayerPlane.Update(gameTime, projectionMatrix, viewMatrix);
 
             base.Update(gameTime);
         }
@@ -159,6 +175,7 @@ namespace RD2
             Graphics.ClearScreen(Color.CornflowerBlue);
 
             m_Terrain.Draw(GraphicsDevice);
+            m_PlayerPlane.Draw();
 
             Graphics.UpdateScreen(gameTime);
 

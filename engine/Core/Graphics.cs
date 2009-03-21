@@ -239,7 +239,13 @@ namespace Galaxy.Core
             Sprite                 spr;
 
             /* Draws 2D Sprites in the layers */
-            sprBatch.Begin();
+            
+            // Gomdong : 3D와 혼용해서 그리기 위해서,  SaveStateMode 설정
+            // 아네시아님께서 보시고, 다시 설정해 주시면 됩니다. 임시로 되게끔 바꿨습니다.
+
+            //sprBatch.Begin();
+            sprBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
+            
             for ( i = 0; i < maxLayerNum; i++ )
             {
                 list = layers[i];

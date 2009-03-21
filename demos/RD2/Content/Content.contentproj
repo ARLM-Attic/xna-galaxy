@@ -46,6 +46,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3D_Object\Ship.fbx">
+      <Name>Ship</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="Map\smile.bmp">
       <Name>smile</Name>
       <Importer>TextureImporter</Importer>
