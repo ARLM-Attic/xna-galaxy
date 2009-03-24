@@ -21,15 +21,15 @@ namespace Galaxy.Core
         public Vector3 position = new Vector3(0,25,0); // 임시로 보이게 하기 위해 높게 띄워놈.
         public Vector3 rotation = Vector3.Zero;
 
-        public float scale = 0.005f;          //크기비율
-        public float rotation_rate = 0.05f;         //회전
-        public float velocity = 0.0f;           //속도
-        public float acceleration = 0.01f;      // 가속도
-        public float friction = 0.0025f;           // 마찰
-        public float max_veloctiy = 250.0f;     // 최대 속도
+        private float scale = 0.005f;          //크기비율
+        private float rotation_rate = 0.05f;         //회전
+        private float velocity = 0.0f;           //속도
+        private float acceleration = 0.01f;      // 가속도
+        private float friction = 0.0025f;           // 마찰
+        private float max_veloctiy = 250.0f;     // 최대 속도
         
-        public Vector3 direction = Vector3.Zero;      //진행방향
-        public Vector3 up = Vector3.Up;        //윗방향
+        Vector3 direction = Vector3.Zero;      //진행방향
+        Vector3 up = Vector3.Up;        //윗방향
          
         private Matrix cameraProjectionMatrix;
         private Matrix cameraViewMatrix;
