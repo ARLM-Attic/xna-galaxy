@@ -1,0 +1,1 @@
+D:\TFS\engine\core\Content\obj\x86\Debug\ResolveAssemblyReference.cache
