@@ -27,7 +27,7 @@ namespace Galaxy.Core
         // 지형 그리기 위한 Effect
         private BasicEffect m_TerrainEffect;
 
-        // 지형을 생성합니다.
+        // 지형을 생성합니다 .
         public cTerrain()
         {
             m_VertexBuffer = null;
