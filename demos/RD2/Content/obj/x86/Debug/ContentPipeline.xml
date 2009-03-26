@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline" xmlns:Graphics="Microsoft.Xna.Framework.Graphics" xmlns:Processors="Microsoft.Xna.Framework.Content.Pipeline.Processors">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Images\sample.tga</Source>
+      <Name>Images\sample</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\TFS\demos\RD2\bin\x86\Debug\Content\Images\sample.xnb</Output>
+      <Time>2009-03-08T21:51:03.5230168+09:00</Time>
+    </Item>
+    <Item>
+      <Source>Map\texture.jpg</Source>
+      <Name>Map\texture</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\TFS\demos\RD2\bin\x86\Debug\Content\Map\texture.xnb</Output>
+      <Time>2009-03-08T21:51:04.1890168+09:00</Time>
+    </Item>
+    <Item>
+      <Source>3D_Object\Ship.fbx</Source>
+      <Name>3D_Object\Ship</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>D:\TFS\demos\RD2\bin\x86\Debug\Content\3D_Object\Ship.xnb</Output>
+      <Time>2009-03-24T21:51:02.1155918+09:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\3D_Object\Ship_0.xml</Key>
+        <Value>2009-03-26T15:52:28.9006183+09:00</Value>
+      </Dependency>
+      <Request>D:\TFS\demos\RD2\bin\x86\Debug\Content\3D_Object\ShipDiffuse_0.xnb</Request>
+    </Item>
+    <Item>
+      <Source>3D_Object\Ship.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\3D_Object\Ship_0.xml</Output>
+      <Time>2009-03-24T21:51:02.1155918+09:00</Time>
+    </Item>
+    <Item>
+      <Source>3D_Object\ShipDiffuse.tga</Source>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor" Type="Graphics:Color">FFFF00FF</Data>
+        <Data Key="ColorKeyEnabled" Type="bool">true</Data>
+        <Data Key="TextureFormat" Type="Processors:TextureProcessorOutputFormat">DxtCompressed</Data>
+        <Data Key="GenerateMipmaps" Type="bool">true</Data>
+        <Data Key="ResizeToPowerOfTwo" Type="bool">false</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>D:\TFS\demos\RD2\bin\x86\Debug\Content\3D_Object\ShipDiffuse_0.xnb</Output>
+      <Time>2009-03-24T21:50:58.3345918+09:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Windows</TargetPlatform>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>D:\TFS\demos\RD2\Content\</RootDirectory>
+      <LoggerRootDirectory>D:\TFS\demos\RD2\</LoggerRootDirectory>
+      <IntermediateDirectory>D:\TFS\demos\RD2\Content\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>D:\TFS\demos\RD2\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2008-10-10T17:42:32+09:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2008-10-10T17:43:28+09:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2008-10-10T17:43:18+09:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2008-10-10T17:48:18+09:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files\Microsoft XNA\XNA Game Studio\v3.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2008-10-10T17:48:50+09:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\3.0.0.0__6d5c3888ef60e27d\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2009-02-14T03:19:05.3454235+09:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
