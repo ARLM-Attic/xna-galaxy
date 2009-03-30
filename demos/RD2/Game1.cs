@@ -86,7 +86,7 @@ namespace RD2
         // 임시로 카메라 Update 함수 만듬.
         private void UpdateCamera(ref Matrix projectionMatrix, ref Matrix viewMatrix)
         {
-            Vector3 cameraPosition = new Vector3(80.0f, 80.0f, 80.0f);
+            Vector3 cameraPosition = new Vector3(200.0f, 200.0f, 200.0f);
             Vector3 cameraTarget = new Vector3(0.0f, 0.0f, 0.0f);
             Vector3 cameraUpvector = Vector3.Up;
 

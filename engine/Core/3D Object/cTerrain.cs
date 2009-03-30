@@ -91,7 +91,7 @@ namespace Galaxy.Core
 
             heightmap_Data = new int[m_Width, m_Height];
 
-            const int Yscale = 20;
+            const int Yscale = 30;
 
             for (UInt32 z = 0; z < m_Height; z++)
             {
@@ -119,7 +119,7 @@ namespace Galaxy.Core
             {
                 for (int z = 0; z < height; z++)
                 {
-                    position = new Vector3(x, heightMap_data[x, z], z);
+                    position = new Vector3((x - width / 2)  * 30 , heightMap_data[x, z], (z - height / 2) * 30);
                     vertices[x + z * width].Normal = new Vector3(0, -1, 0);
 
                     textureCoordinates = new Vector2(x / (float)width, z / (float)height);
@@ -203,7 +203,7 @@ namespace Galaxy.Core
             m_TerrainEffect.SpecularPower = 8;
 
             //안개 효과
-            m_TerrainEffect.FogEnabled = true;
+            m_TerrainEffect.FogEnabled = false;     
             m_TerrainEffect.FogColor = new Vector3(0.15f);
             m_TerrainEffect.FogStart = 100;
             m_TerrainEffect.FogEnd = 120;
