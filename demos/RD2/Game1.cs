@@ -172,7 +172,9 @@ namespace RD2
 
         protected override void Draw(GameTime gameTime)
         {
-            Graphics.ClearScreen(Color.CornflowerBlue);
+            /* Z 버퍼 기능을 킨다. */
+            Graphics.ClearScreen(ClearOptions.Target | ClearOptions.DepthBuffer,
+                                 Color.CornflowerBlue, 1.0f, 0);
 
             m_Terrain.Draw(GraphicsDevice);
             m_PlayerPlane.Draw();

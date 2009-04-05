@@ -242,8 +242,9 @@ namespace Galaxy.Core
             
             // Gomdong : 3D와 혼용해서 그리기 위해서,  SaveStateMode 설정
             // 아네시아님께서 보시고, 다시 설정해 주시면 됩니다. 임시로 되게끔 바꿨습니다.
-
-            //sprBatch.Begin();
+            // >> anecia: 네, 일단 곰동님이 수정 해 주신 방법을 이용하고 나중에 성능에 대해
+            //            더 좋은 방안이 생기면 수정하는 것으로 하겠습니다.
+            //
             sprBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Immediate, SaveStateMode.SaveState);
             
             for ( i = 0; i < maxLayerNum; i++ )
@@ -306,6 +307,12 @@ namespace Galaxy.Core
         {
             Debug.Assert(GraphicsDevice != null);
             GraphicsDevice.Clear(color);
+        }
+
+        public static void ClearScreen(ClearOptions options, Color color, float depth, int stencil)
+        {
+            Debug.Assert(GraphicsDevice != null);
+            GraphicsDevice.Clear(options, color, depth, stencil);
         }
 
         /**

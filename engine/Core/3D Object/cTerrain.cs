@@ -187,10 +187,7 @@ namespace Galaxy.Core
 
 
         public void Draw(GraphicsDevice device)
-        {
-            device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.CornflowerBlue, 1.0f, 0);  //Z 버퍼 기능을 킨다.
-
-            
+        {          
             device.RenderState.CullMode = CullMode.CullClockwiseFace;
 
             m_TerrainEffect.TextureEnabled = true;
