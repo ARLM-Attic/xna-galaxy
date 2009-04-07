@@ -1,6 +1,0 @@
-D:\TFS\engine\Utility\bin\x86\Debug\Galaxy.Utility.dll
-D:\TFS\engine\Utility\bin\x86\Debug\Galaxy.Utility.pdb
-D:\TFS\engine\Utility\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\TFS\engine\Utility\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-D:\TFS\engine\Utility\obj\x86\Debug\Galaxy.Utility.dll
-D:\TFS\engine\Utility\obj\x86\Debug\Galaxy.Utility.pdb

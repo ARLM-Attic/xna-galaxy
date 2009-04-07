@@ -1,7 +1,0 @@
-D:\TFS\engine\core\bin\x86\Debug\Galaxy.Core.dll.config
-D:\TFS\engine\core\bin\x86\Debug\Galaxy.Core.dll
-D:\TFS\engine\core\bin\x86\Debug\Galaxy.Core.pdb
-D:\TFS\engine\core\obj\x86\Debug\ResolveAssemblyReference.cache
-D:\TFS\engine\core\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-D:\TFS\engine\core\obj\x86\Debug\Galaxy.Core.dll
-D:\TFS\engine\core\obj\x86\Debug\Galaxy.Core.pdb

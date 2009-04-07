@@ -1,5 +1,0 @@
-Content\Images\sample.xnb
-Content\Map\texture.xnb
-Content\3D_Object\Ship.xnb
-Content\3D_Object\ShipDiffuse_0.xnb
-Content\Map\smile.bmp
